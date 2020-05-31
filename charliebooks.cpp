@@ -6,7 +6,7 @@
 
 WiFiClient wificlient;
 
-Adafruit_IS31FL3731 ledmatrix;
+Adafruit_IS31FL3731_Wing ledmatrix;
 
 String msg;
 
