@@ -31,6 +31,9 @@ void setup()
 
 	ledmatrix = Adafruit_IS31FL3731_Wing();
 	ledmatrix.begin();
+	ledmatrix.setFrame(0);
+	ledmatrix.setRotation(1);
+	ledmatrix.clear();
 
 	msg = WiFiSettings.string("message", 1, 65535, "Hello");
 
@@ -57,21 +60,20 @@ void setup()
 		ArduinoOTA.handle();
 	};
 
-	ledmatrix.clear();
 	WiFiSettings.connect();
 }
 
 void loop()
 {
 	static uint32_t i = 0;
-	static uint8_t brightness = 0;
+	static uint8_t brightness = 0x00;
 
 	if (!i) {
-		brightness ^= 0x10;
+		brightness ^= 0x08;
 	}
 
-	ledmatrix.drawPixel(i % 16, i / 16, brightness);
-	delay(10);
-	i = (i + 1) % (16 * 9);
+	ledmatrix.drawPixel(i % 15, i / 15, brightness);
+	delay(50);
+	i = (i + 1) % (15 * 7);
 	ArduinoOTA.handle();
 }
