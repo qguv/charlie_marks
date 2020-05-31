@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include <WiFiSettings.h>
 #include <ArduinoOTA.h>
-#include <Adafruit_GFX.h>
 #include "Adafruit_IS31FL3731.h"
 
 WiFiClient wificlient;
