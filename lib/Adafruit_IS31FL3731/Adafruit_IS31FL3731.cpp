@@ -12,6 +12,16 @@
   }
 #endif
 
+const uint8_t phys_led[] = {
+	30, 46, 62, 78, 94, 110, 126, 113,  97, 81, 65, 49, 33, 17, 1,
+	29, 45, 61, 77, 93, 109, 125, 114,  98, 82, 66, 50, 34, 18, 2,
+	28, 44, 60, 76, 92, 108, 124, 115,  99, 83, 67, 51, 35, 19, 3,
+	27, 43, 59, 75, 91, 107, 123, 116, 100, 84, 68, 52, 36, 20, 4,
+	26, 42, 58, 74, 90, 106, 122, 117, 101, 85, 69, 53, 37, 21, 5,
+	25, 41, 57, 73, 89, 105, 121, 118, 102, 86, 70, 54, 38, 22, 6,
+	24, 40, 56, 72, 88, 104, 120, 119, 103, 87, 71, 55, 39, 23, 7,
+};
+
 /**************************************************************************/
 /*!
     @brief Constructor for breakout version
@@ -123,38 +133,14 @@ void Adafruit_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank) {
 /**************************************************************************/
 void Adafruit_IS31FL3731_Wing::drawPixel(int16_t x, int16_t y, uint16_t color) {
   // check rotation, move pixel around if necessary
-  switch (getRotation()) {
-  case 1:
-    _swap_int16_t(x, y);
-    x = 15 - x - 1;
-    break;
-  case 2:
-    x = 15 - x - 1;
-    y = 7 - y - 1;
-    break;
-  case 3:
-    _swap_int16_t(x, y);
-    y = 9 - y - 1;
-    break;
-  }
 
-  // charlie wing is smaller:
-  if ((x < 0) || (x >= 16) || (y < 0) || (y >= 7))
-    return;
-
-  if (x > 7) {
-    x = 15 - x;
-    y += 8;
-  } else {
-    y = 7 - y;
-  }
-
-  _swap_int16_t(x, y);
+  if ((getRotation() & 1) == 0) y = 6 - y;
+  if ((getRotation() & 2) == 1) x = 14 - x;
 
   if (color > 255)
     color = 255; // PWM 8bit max
 
-  setLEDPWM(x + y * 16, color, _frame);
+  setLEDPWM(phys_led[x + y * 15], color, _frame);
   return;
 }
 
