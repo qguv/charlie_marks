@@ -158,8 +158,8 @@ void show_time()
 	ledmatrix.clear();
 
 	int width = 0;
-	if (t[0] == '1') {
-		width += number_widths[1] + 1;
+	if (t[0] != '0') {
+		width += number_widths[t[0] - '0'] + 1;
 	}
 	width += number_widths[t[1] - '0'] + 1;
 	width += number_widths[t[3] - '0'] + 1;
@@ -167,8 +167,8 @@ void show_time()
 
 	int pos = (15 - width + 1) / 2;
 
-	if (t[0] == '1') {
-		show_digit(1, &pos);
+	if (t[0] != '0') {
+		show_digit(t[0] - '0', &pos);
 		pos += 1;
 	}
 	show_digit(t[1] - '0', &pos);
