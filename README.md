@@ -7,7 +7,7 @@ Initial setup:
 3. run `platformio -t upload -e serial`
 4. connect to the device's wifi network, which will be esp-xxxxxx. Take note of this name!
 5. visit http://192.168.4.1
-6. enter wifi credentials and a URL that the device should request
+6. enter wifi credentials and some messages that the device should request. separate messages with full stops.
 7. click 'save'
 8. click 'Restart device'
 
