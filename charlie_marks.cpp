@@ -106,6 +106,11 @@ void setup_ota()
 {
 	ArduinoOTA.setHostname(WiFiSettings.hostname.c_str());
 	ArduinoOTA.setPassword(WiFiSettings.password.c_str());
+	ArduinoOTA.onStart([]() {
+			ledmatrix.clear();
+			timeClient.end();
+			ota_running = true;
+	});
 	ArduinoOTA.begin();
 }
 
@@ -183,6 +188,8 @@ void setup()
 	ledmatrix.clear();
 
 	chunk_width = 0;
+	ota_running = false;
+
 	msg = WiFiSettings.string("message", 1, 65535, "Hello");
 	msg.trim();
 
@@ -225,30 +232,32 @@ void loop()
 	static uint8_t frame = 0;
 	static int clock_frames = 0;
 
-	if (x == chunk_width) {
-		x = 0;
-		next_string();
+	if (!ota_running) {
+		if (x == chunk_width) {
+			x = 0;
+			next_string();
 
-		show_time();
+			show_time();
 
-		clock_frames = 600;
-	}
+			clock_frames = 600;
+		}
 
 
-	if (clock_frames) {
-		clock_frames--;
+		if (clock_frames) {
+			clock_frames--;
+			delay(25);
+		} else {
+			ledmatrix.setFrame(frame);
+			ledmatrix.clear();
+			ledmatrix.setCursor(15 - x++, 0);
+			ledmatrix.print(msg_chunk.c_str());
+			ledmatrix.displayFrame(frame);
+		}
+
 		delay(25);
-	} else {
-		ledmatrix.setFrame(frame);
-		ledmatrix.clear();
-		ledmatrix.setCursor(15 - x++, 0);
-		ledmatrix.print(msg_chunk.c_str());
-		ledmatrix.displayFrame(frame);
+
+		frame ^= 1;
 	}
-
-	delay(25);
-
-	frame ^= 1;
 
 	ArduinoOTA.handle();
 }
