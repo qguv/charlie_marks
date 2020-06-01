@@ -116,13 +116,18 @@ void setup_ota()
 
 void next_string()
 {
-	int msg_pos = msg.indexOf(".");
-	if (msg_pos == -1) {
-		msg_chunk = msg;
-		msg = String("");
+	static int msg_pos = 0;
+
+	int next_msg_pos = msg.indexOf(".", msg_pos);
+	if (next_msg_pos == -1) {
+		msg_chunk = msg.substring(msg_pos, msg.length());
+		msg_pos = 0;
 	} else {
-		msg_chunk = msg.substring(0, msg_pos + 1);
-		msg.remove(0, msg_pos + 1);
+		msg_chunk = msg.substring(msg_pos, next_msg_pos + 1);
+		msg_pos = next_msg_pos + 1;
+		if (msg_pos >= msg.length()) {
+			msg_pos = 0;
+		}
 	}
 
 	static int16_t  x1 = 0, y1 = 0;
