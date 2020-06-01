@@ -231,7 +231,7 @@ void loop()
 
 		show_time();
 
-		clock_frames = 200;
+		clock_frames = 600;
 	}
 
 
